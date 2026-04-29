@@ -10,12 +10,16 @@
     :root {
       --morning-bg: #fef3c7;
       --morning-fg: #92400e;
+      --morning-border: #fcd34d;
       --lunch-bg: #d1fae5;
       --lunch-fg: #065f46;
+      --lunch-border: #6ee7b7;
       --dinner-bg: #ffedd5;
       --dinner-fg: #9a3412;
+      --dinner-border: #fdba74;
       --accent: #3b82f6;
       --today-bg: #fffbeb;
+      --today-border: #fbbf24;
       --sun: #ef4444;
       --sat: #3b82f6;
       --radius: 12px;
@@ -27,13 +31,13 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      padding-bottom: 32px;
+      padding-bottom: 40px;
     }
 
     /* ── Header ── */
     header {
       background: #fff;
-      padding: 14px 16px 10px;
+      padding: 13px 16px 10px;
       box-shadow: 0 1px 4px rgba(0,0,0,.08);
       position: sticky;
       top: 0;
@@ -44,11 +48,7 @@
       align-items: center;
       justify-content: space-between;
     }
-    .header-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #1e293b;
-    }
+    .header-title { font-size: 17px; font-weight: 700; color: #1e293b; }
     .sync-badge {
       display: flex;
       align-items: center;
@@ -65,7 +65,7 @@
     .sync-dot.offline { background: #ef4444; }
     .sync-dot.pending { background: #f59e0b; }
 
-    /* ── Calendar nav ── */
+    /* ── Week navigation ── */
     .cal-nav {
       display: flex;
       align-items: center;
@@ -76,168 +76,122 @@
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 7px 14px;
+      padding: 7px 16px;
       font-size: 16px;
       cursor: pointer;
       color: #475569;
       transition: background .15s;
     }
     .nav-btn:active { background: #e2e8f0; }
-    .month-label {
-      font-weight: 600;
-      font-size: 14px;
-      color: #334155;
-    }
+    .week-label { font-weight: 600; font-size: 13px; color: #334155; text-align: center; }
 
-    /* ── 3-day grid ── */
+    /* ── Day cards (vertical) ── */
     .days-wrap {
       padding: 10px 12px 0;
       display: flex;
+      flex-direction: column;
       gap: 8px;
     }
+
     .day-card {
-      flex: 1;
       background: #fff;
       border-radius: var(--radius);
-      padding: 8px 6px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color .15s, transform .1s;
       box-shadow: 0 1px 3px rgba(0,0,0,.07);
-      min-width: 0;
+      border: 1.5px solid transparent;
+      overflow: hidden;
     }
-    .day-card:active { transform: scale(.97); }
-    .day-card.selected { border-color: var(--accent); }
-    .day-card.today { background: var(--today-bg); }
+    .day-card.today { background: var(--today-bg); border-color: var(--today-border); }
 
+    /* Card header row */
     .day-head {
-      text-align: center;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #f0f0f0;
-      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 12px 8px;
+      border-bottom: 1px solid #f1f5f9;
     }
-    .day-num {
-      font-size: 22px;
+    .day-date {
+      font-size: 16px;
       font-weight: 700;
-      line-height: 1.1;
       color: #1e293b;
+      letter-spacing: .02em;
     }
-    .day-name { font-size: 11px; color: #64748b; margin-top: 1px; }
-    .today .day-num { color: #d97706; }
-    .day-sun .day-num, .day-sun .day-name { color: var(--sun); }
-    .day-sat .day-num, .day-sat .day-name { color: var(--sat); }
+    .day-dow {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      color: #64748b;
+    }
+    .day-card.day-sun .day-date,
+    .day-card.day-sun .day-dow { color: var(--sun); }
+    .day-card.day-sun .day-dow { background: #fee2e2; }
+    .day-card.day-sat .day-date,
+    .day-card.day-sat .day-dow { color: var(--sat); }
+    .day-card.day-sat .day-dow { background: #dbeafe; }
+    .today-badge {
+      font-size: 10px;
+      font-weight: 700;
+      color: #d97706;
+      background: #fef3c7;
+      padding: 1px 7px;
+      border-radius: 20px;
+    }
+    .saved-mark {
+      margin-left: auto;
+      font-size: 11px;
+      color: #10b981;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .saved-mark.show { opacity: 1; }
+
+    /* Meal input rows */
+    .meals { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
 
     .meal-row {
       display: flex;
       align-items: center;
-      gap: 4px;
-      margin-bottom: 3px;
-      border-radius: 6px;
-      padding: 3px 5px;
-      min-width: 0;
+      gap: 7px;
+      border-radius: 8px;
+      padding: 5px 8px;
     }
     .meal-row.m { background: var(--morning-bg); }
     .meal-row.l { background: var(--lunch-bg); }
     .meal-row.d { background: var(--dinner-bg); }
+
     .meal-lbl {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       flex-shrink: 0;
+      width: 16px;
+      text-align: center;
     }
     .meal-row.m .meal-lbl { color: var(--morning-fg); }
     .meal-row.l .meal-lbl { color: var(--lunch-fg); }
     .meal-row.d .meal-lbl { color: var(--dinner-fg); }
-    .meal-val {
-      font-size: 10px;
-      color: #374151;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+
+    .meal-in {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      color: #1e293b;
+      outline: none;
+      padding: 2px 0;
       min-width: 0;
     }
-    .meal-val.empty { color: #cbd5e1; }
+    .meal-in::placeholder { color: #c4c9d4; }
+    .meal-in:focus { color: #0f172a; }
 
-    /* ── Edit panel ── */
-    .edit-panel {
-      margin: 10px 12px 0;
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.10);
-      display: none;
-      animation: slideDown .2s ease;
-    }
-    .edit-panel.open { display: block; }
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .panel-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 14px;
-    }
-
-    .field-group { margin-bottom: 10px; }
-    .field-label {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-bottom: 5px;
-    }
-    .badge {
-      padding: 2px 9px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .badge.m { background: var(--morning-bg); color: var(--morning-fg); }
-    .badge.l { background: var(--lunch-bg);   color: var(--lunch-fg); }
-    .badge.d { background: var(--dinner-bg);  color: var(--dinner-fg); }
-
-    .meal-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 9px;
-      font-size: 15px;
-      outline: none;
-      transition: border-color .2s;
-      color: #1e293b;
-    }
-    .meal-input:focus { border-color: var(--accent); }
-
-    .btn-row { display: flex; gap: 8px; margin-top: 12px; }
-    .btn-save {
-      flex: 1;
-      padding: 12px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background .15s;
-    }
-    .btn-save:active { background: #2563eb; }
-    .btn-close {
-      padding: 12px 16px;
-      background: #f1f5f9;
-      color: #64748b;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    .btn-close:active { background: #e2e8f0; }
+    /* Focused row highlight */
+    .meal-row.m:focus-within { outline: 1.5px solid var(--morning-border); }
+    .meal-row.l:focus-within { outline: 1.5px solid var(--lunch-border); }
+    .meal-row.d:focus-within { outline: 1.5px solid var(--dinner-border); }
 
     /* ── Shopping list ── */
-    .section {
-      margin: 14px 12px 0;
-    }
+    .section { margin: 14px 12px 0; }
     .section-head {
       font-size: 15px;
       font-weight: 700;
@@ -247,11 +201,7 @@
       align-items: center;
       gap: 6px;
     }
-    .add-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
+    .add-row { display: flex; gap: 8px; margin-bottom: 10px; }
     .shop-input {
       flex: 1;
       padding: 10px 12px;
@@ -283,16 +233,12 @@
     .shop-item {
       display: flex;
       align-items: center;
-      padding: 13px 14px;
+      padding: 12px 14px;
       border-bottom: 1px solid #f8fafc;
       gap: 11px;
-      transition: background .1s;
     }
     .shop-item:last-child { border-bottom: none; }
-    .shop-item.checked .item-name {
-      text-decoration: line-through;
-      color: #94a3b8;
-    }
+    .shop-item.checked .item-name { text-decoration: line-through; color: #94a3b8; }
 
     .chk-btn {
       width: 23px; height: 23px;
@@ -308,11 +254,7 @@
       color: transparent;
       transition: all .15s;
     }
-    .shop-item.checked .chk-btn {
-      background: #10b981;
-      border-color: #10b981;
-      color: #fff;
-    }
+    .shop-item.checked .chk-btn { background: #10b981; border-color: #10b981; color: #fff; }
     .item-name { flex: 1; font-size: 15px; color: #1e293b; }
     .del-btn {
       background: none;
@@ -324,7 +266,7 @@
       border-radius: 6px;
       transition: color .15s;
     }
-    .del-btn:hover { color: #ef4444; }
+    .del-btn:active { color: #ef4444; }
 
     .empty-msg {
       padding: 20px;
@@ -332,32 +274,10 @@
       color: #94a3b8;
       font-size: 14px;
     }
-
-    /* ── Config notice ── */
-    .cfg-notice {
-      margin: 10px 12px 0;
-      background: #fef3c7;
-      border: 1.5px solid #f59e0b;
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #78350f;
-      line-height: 1.5;
-    }
-    .cfg-notice code {
-      background: #fde68a;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-family: monospace;
-    }
   </style>
 </head>
 <body>
 
-<!-- ========================================================
-  ★ STEP 1: 下記 firebaseConfig をあなたの値に書き換えてください ★
-  Firebase Console > プロジェクトの設定 > マイアプリ > SDK の設定と構成
-======================================================== -->
 <script>
   window.__FIREBASE_CONFIG__ = {
     apiKey:            "AIzaSyCz2iN7xNeuzn9WfmB0TYPrhpzJsGNiUGc",
@@ -369,7 +289,6 @@
   };
 </script>
 
-<!-- Header -->
 <header>
   <div class="header-row">
     <span class="header-title">🍽 献立カレンダー</span>
@@ -380,45 +299,14 @@
   </div>
 </header>
 
-<!-- Config notice (hidden when configured) -->
-<div class="cfg-notice" id="cfgNotice">
-  ⚠️ <strong>Firebase の設定が必要です。</strong><br>
-  <code>index.html</code> の先頭にある <code>firebaseConfig</code> をあなたのプロジェクトの値に書き換えてください。<br>
-  設定するまでこのデバイスのみ（ローカル保存）で動作します。
-</div>
-
-<!-- Calendar navigation -->
 <div class="cal-nav">
-  <button class="nav-btn" id="prevBtn">◀</button>
-  <span class="month-label" id="monthLabel"></span>
-  <button class="nav-btn" id="nextBtn">▶</button>
+  <button class="nav-btn" id="prevBtn">◀ 前週</button>
+  <span class="week-label" id="weekLabel"></span>
+  <button class="nav-btn" id="nextBtn">次週 ▶</button>
 </div>
 
-<!-- 3-day cards -->
 <div class="days-wrap" id="daysWrap"></div>
 
-<!-- Edit panel -->
-<div class="edit-panel" id="editPanel">
-  <div class="panel-title" id="panelTitle"></div>
-  <div class="field-group">
-    <div class="field-label"><span class="badge m">朝</span></div>
-    <input class="meal-input" id="inMorning" type="text" placeholder="朝食のメニューを入力">
-  </div>
-  <div class="field-group">
-    <div class="field-label"><span class="badge l">昼</span></div>
-    <input class="meal-input" id="inLunch" type="text" placeholder="昼食のメニューを入力">
-  </div>
-  <div class="field-group">
-    <div class="field-label"><span class="badge d">夕</span></div>
-    <input class="meal-input" id="inDinner" type="text" placeholder="夕食のメニューを入力">
-  </div>
-  <div class="btn-row">
-    <button class="btn-save" id="saveBtn">保存</button>
-    <button class="btn-close" id="closeBtn">✕</button>
-  </div>
-</div>
-
-<!-- Shopping list -->
 <div class="section">
   <div class="section-head">🛒 買い物リスト</div>
   <div class="add-row">
@@ -430,7 +318,6 @@
   </div>
 </div>
 
-<!-- Firebase SDK (ES Module) -->
 <script type="module">
   import { initializeApp }
     from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
@@ -440,179 +327,187 @@
     onSnapshot, addDoc, updateDoc, deleteDoc, query, orderBy
   } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-  // ─────────────────────────────────────────────
-  // Config check
-  // ─────────────────────────────────────────────
+  // ── Firebase init ──────────────────────────────
   const cfg = window.__FIREBASE_CONFIG__;
   const isConfigured = cfg.apiKey !== "YOUR_API_KEY";
-
   const syncDot  = document.getElementById('syncDot');
   const syncText = document.getElementById('syncText');
-  const cfgNotice = document.getElementById('cfgNotice');
 
   function setSyncStatus(state, msg) {
     syncDot.className = 'sync-dot' + (state !== 'ok' ? ' ' + state : '');
     syncText.textContent = msg;
   }
 
-  // ─────────────────────────────────────────────
-  // Firebase init
-  // ─────────────────────────────────────────────
   let db = null;
   if (isConfigured) {
-    cfgNotice.style.display = 'none';
     try {
       const app = initializeApp(cfg);
       db = getFirestore(app);
-      // オフラインキャッシュを有効化
       try { await enableIndexedDbPersistence(db); } catch(e) {}
       setSyncStatus('ok', '同期中');
-    } catch (e) {
+    } catch(e) {
       console.error(e);
       setSyncStatus('offline', '接続エラー');
     }
   } else {
-    setSyncStatus('offline', 'ローカル保存（設定未完了）');
+    setSyncStatus('offline', 'ローカル保存');
   }
 
-  // ─────────────────────────────────────────────
-  // State
-  // ─────────────────────────────────────────────
-  const DOW = ['日','月','火','水','木','金','土'];
+  // ── State ─────────────────────────────────────
+  const DOW    = ['日','月','火','水','木','金','土'];
   const MONTHS = [...Array(12)].map((_,i) => `${i+1}月`);
 
-  let baseDate = midnight(new Date());
-  let selectedKey = null;
-  let mealsCache = {};   // { "YYYY-MM-DD": { morning, lunch, dinner } }
-  let shopItems  = [];   // [{ id, name, checked }]
+  let baseDate  = weekStart(new Date());   // 週の先頭（今週の月曜）
+  let mealsCache = {};
+  let shopItems  = [];
 
-  // ─────────────────────────────────────────────
-  // Utilities
-  // ─────────────────────────────────────────────
-  function midnight(d) {
-    const r = new Date(d); r.setHours(0,0,0,0); return r;
-  }
-  function todayKey() { return toKey(midnight(new Date())); }
+  // ── Utilities ─────────────────────────────────
+  function midnight(d) { const r = new Date(d); r.setHours(0,0,0,0); return r; }
+  function todayKey()  { return toKey(midnight(new Date())); }
   function toKey(d) {
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
   function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
   function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // ─────────────────────────────────────────────
-  // Calendar render
-  // ─────────────────────────────────────────────
+  function weekStart(d) {
+    const r = midnight(d);
+    // 月曜始まり
+    const dow = r.getDay();
+    r.setDate(r.getDate() - (dow === 0 ? 6 : dow - 1));
+    return r;
+  }
+
+  // ── Calendar render ───────────────────────────
   function renderCalendar() {
     const wrap = document.getElementById('daysWrap');
-    const tk = todayKey();
-    const days = [baseDate, addDays(baseDate,1), addDays(baseDate,2)];
+    const tk   = todayKey();
+    const days = [...Array(7)].map((_,i) => addDays(baseDate, i));
 
-    // Month label
-    const ml = days[0].getMonth() !== days[2].getMonth()
-      ? `${days[0].getFullYear()}年 ${MONTHS[days[0].getMonth()]} – ${MONTHS[days[2].getMonth()]}`
-      : `${days[0].getFullYear()}年 ${MONTHS[days[0].getMonth()]}`;
-    document.getElementById('monthLabel').textContent = ml;
+    // Week label
+    const first = days[0], last = days[6];
+    const sameMonth = first.getMonth() === last.getMonth();
+    document.getElementById('weekLabel').textContent = sameMonth
+      ? `${first.getFullYear()}年 ${MONTHS[first.getMonth()]} ${first.getDate()}〜${last.getDate()}日`
+      : `${first.getFullYear()}年 ${MONTHS[first.getMonth()]}${first.getDate()}日〜${MONTHS[last.getMonth()]}${last.getDate()}日`;
+
+    // 既存 input の focused な key+meal を記録（更新中に blur させない）
+    const active = document.activeElement;
+    const focusedKey  = active?.dataset?.key  || null;
+    const focusedMeal = active?.dataset?.meal || null;
 
     wrap.innerHTML = days.map(d => {
-      const k = toKey(d);
+      const k   = toKey(d);
       const dow = d.getDay();
-      const m = mealsCache[k] || {};
+      const m   = mealsCache[k] || {};
+      const isToday = k === tk;
+
       const cls = [
         'day-card',
-        dow===0 ? 'day-sun' : '',
-        dow===6 ? 'day-sat' : '',
-        k===tk  ? 'today' : '',
-        k===selectedKey ? 'selected' : ''
+        dow === 0 ? 'day-sun' : '',
+        dow === 6 ? 'day-sat' : '',
+        isToday   ? 'today'   : ''
       ].filter(Boolean).join(' ');
 
-      const mealHtml = (type, clsName, lbl, val) => `
+      const mInput = (meal, clsName, lbl, ph) => `
         <div class="meal-row ${clsName}">
           <span class="meal-lbl">${lbl}</span>
-          <span class="meal-val${val?'':' empty'}">${val ? esc(val) : '─'}</span>
+          <input class="meal-in" type="text"
+            data-key="${k}" data-meal="${meal}"
+            placeholder="${ph}"
+            value="${esc(m[meal] || '')}">
         </div>`;
 
       return `<div class="${cls}" data-key="${k}">
         <div class="day-head">
-          <div class="day-num">${d.getDate()}</div>
-          <div class="day-name">${DOW[dow]}</div>
+          <span class="day-date">${d.getMonth()+1}/${d.getDate()}</span>
+          <span class="day-dow">${DOW[dow]}</span>
+          ${isToday ? '<span class="today-badge">今日</span>' : ''}
+          <span class="saved-mark" id="saved-${k}">保存 ✓</span>
         </div>
-        ${mealHtml('morning','m','朝',m.morning||'')}
-        ${mealHtml('lunch','l','昼',m.lunch||'')}
-        ${mealHtml('dinner','d','夕',m.dinner||'')}
+        <div class="meals">
+          ${mInput('morning','m','朝','朝食のメニュー')}
+          ${mInput('lunch',  'l','昼','昼食のメニュー')}
+          ${mInput('dinner', 'd','夕','夕食のメニュー')}
+        </div>
       </div>`;
     }).join('');
 
-    wrap.querySelectorAll('.day-card').forEach(card => {
-      card.addEventListener('click', () => onDayClick(card.dataset.key));
+    // イベント登録
+    wrap.querySelectorAll('.meal-in').forEach(input => {
+      input.addEventListener('blur',  () => onMealBlur(input));
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+      });
     });
-  }
 
-  // ─────────────────────────────────────────────
-  // Day click → toggle edit panel
-  // ─────────────────────────────────────────────
-  function onDayClick(key) {
-    if (selectedKey === key) {
-      selectedKey = null;
-      closePanel();
-      return;
+    // フォーカス復元
+    if (focusedKey && focusedMeal) {
+      const el = wrap.querySelector(
+        `.meal-in[data-key="${focusedKey}"][data-meal="${focusedMeal}"]`
+      );
+      if (el) {
+        el.focus();
+        // カーソルを末尾に
+        const len = el.value.length;
+        el.setSelectionRange(len, len);
+      }
     }
-    selectedKey = key;
-    renderCalendar();
-    openPanel(key);
   }
 
-  function openPanel(key) {
-    const d = new Date(key + 'T00:00:00');
+  // ── Auto-save on blur ─────────────────────────
+  const saveTimers = {};
+
+  function onMealBlur(input) {
+    const key  = input.dataset.key;
+    const meal = input.dataset.meal;
+    const val  = input.value.trim();
+
+    // 変更なければスキップ
+    if ((mealsCache[key]?.[meal] || '') === val) return;
+
+    // キャッシュ更新
+    if (!mealsCache[key]) mealsCache[key] = {};
+    mealsCache[key][meal] = val;
+
+    // デバウンス（同じカードの複数フィールドをまとめて保存）
+    clearTimeout(saveTimers[key]);
+    saveTimers[key] = setTimeout(() => saveMeals(key), 300);
+  }
+
+  async function saveMeals(key) {
     const m = mealsCache[key] || {};
-    document.getElementById('panelTitle').textContent =
-      `${d.getMonth()+1}月${d.getDate()}日（${DOW[d.getDay()]}）の献立`;
-    document.getElementById('inMorning').value = m.morning || '';
-    document.getElementById('inLunch').value   = m.lunch   || '';
-    document.getElementById('inDinner').value  = m.dinner  || '';
-    const panel = document.getElementById('editPanel');
-    panel.classList.add('open');
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    document.getElementById('inMorning').focus();
-  }
-
-  function closePanel() {
-    document.getElementById('editPanel').classList.remove('open');
-    renderCalendar();
-  }
-
-  // ─────────────────────────────────────────────
-  // Save meals
-  // ─────────────────────────────────────────────
-  async function saveMeals() {
-    if (!selectedKey) return;
     const data = {
-      morning: document.getElementById('inMorning').value.trim(),
-      lunch:   document.getElementById('inLunch').value.trim(),
-      dinner:  document.getElementById('inDinner').value.trim(),
+      morning:   m.morning   || '',
+      lunch:     m.lunch     || '',
+      dinner:    m.dinner    || '',
       updatedAt: new Date().toISOString()
     };
 
     if (db) {
       setSyncStatus('pending', '保存中…');
       try {
-        await setDoc(doc(db, 'meals', selectedKey), data);
-        setSyncStatus('ok', '保存しました ✓');
-        setTimeout(() => setSyncStatus('ok', '同期中'), 2000);
+        await setDoc(doc(db, 'meals', key), data);
+        setSyncStatus('ok', '同期中');
+        flashSaved(key);
       } catch(e) {
         console.error(e);
         setSyncStatus('offline', '保存エラー');
       }
     } else {
-      mealsCache[selectedKey] = data;
       localStorage.setItem('meals', JSON.stringify(mealsCache));
-      renderCalendar();
+      flashSaved(key);
     }
-    closePanel();
   }
 
-  // ─────────────────────────────────────────────
-  // Shopping list render
-  // ─────────────────────────────────────────────
+  function flashSaved(key) {
+    const el = document.getElementById(`saved-${key}`);
+    if (!el) return;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 2000);
+  }
+
+  // ── Shopping list ─────────────────────────────
   function renderShop() {
     const el = document.getElementById('shopList');
     if (!shopItems.length) {
@@ -626,13 +521,15 @@
         <button class="del-btn" data-del="${item.id}">✕</button>
       </div>`).join('');
 
-    el.querySelectorAll('.chk-btn').forEach(b => b.addEventListener('click', () => toggleShop(b.dataset.id)));
-    el.querySelectorAll('.del-btn').forEach(b => b.addEventListener('click', () => deleteShop(b.dataset.del)));
+    el.querySelectorAll('.chk-btn').forEach(b =>
+      b.addEventListener('click', () => toggleShop(b.dataset.id)));
+    el.querySelectorAll('.del-btn').forEach(b =>
+      b.addEventListener('click', () => deleteShop(b.dataset.del)));
   }
 
   async function addShop() {
     const input = document.getElementById('shopInput');
-    const name = input.value.trim();
+    const name  = input.value.trim();
     if (!name) return;
     input.value = '';
     if (db) {
@@ -645,7 +542,7 @@
   }
 
   async function toggleShop(id) {
-    const item = shopItems.find(i=>i.id===id);
+    const item = shopItems.find(i => i.id===id);
     if (!item) return;
     if (db) {
       await updateDoc(doc(db,'shopping',id), { checked: !item.checked });
@@ -660,29 +557,26 @@
     if (db) {
       await deleteDoc(doc(db,'shopping',id));
     } else {
-      shopItems = shopItems.filter(i=>i.id!==id);
+      shopItems = shopItems.filter(i => i.id!==id);
       localStorage.setItem('shopping', JSON.stringify(shopItems));
       renderShop();
     }
   }
 
-  // ─────────────────────────────────────────────
-  // Firebase realtime listeners
-  // ─────────────────────────────────────────────
+  // ── Firebase listeners ────────────────────────
   if (db) {
-    // Meals
     onSnapshot(collection(db,'meals'), snap => {
       snap.docChanges().forEach(ch => {
         if (ch.type==='removed') delete mealsCache[ch.doc.id];
         else mealsCache[ch.doc.id] = ch.doc.data();
       });
+      // フォーカス中のカードは再描画で上書きしない
       renderCalendar();
     }, err => {
       console.error(err);
       setSyncStatus('offline','接続エラー');
     });
 
-    // Shopping
     onSnapshot(
       query(collection(db,'shopping'), orderBy('createdAt')),
       snap => {
@@ -691,43 +585,25 @@
       }
     );
   } else {
-    // Local fallback
-    try { mealsCache = JSON.parse(localStorage.getItem('meals')||'{}'); } catch(e){}
-    try { shopItems  = JSON.parse(localStorage.getItem('shopping')||'[]'); } catch(e){}
+    try { mealsCache = JSON.parse(localStorage.getItem('meals')   || '{}'); } catch(e){}
+    try { shopItems  = JSON.parse(localStorage.getItem('shopping')|| '[]'); } catch(e){}
     renderCalendar();
     renderShop();
   }
 
-  // ─────────────────────────────────────────────
-  // Event wiring
-  // ─────────────────────────────────────────────
+  // ── Navigation ────────────────────────────────
   document.getElementById('prevBtn').addEventListener('click', () => {
-    baseDate = addDays(baseDate,-1); selectedKey=null; closePanel();
+    baseDate = addDays(baseDate, -7); renderCalendar();
   });
   document.getElementById('nextBtn').addEventListener('click', () => {
-    baseDate = addDays(baseDate, 1); selectedKey=null; closePanel();
+    baseDate = addDays(baseDate,  7); renderCalendar();
   });
-  document.getElementById('saveBtn').addEventListener('click', saveMeals);
-  document.getElementById('closeBtn').addEventListener('click', () => {
-    selectedKey=null; closePanel();
-  });
+
   document.getElementById('addBtn').addEventListener('click', addShop);
   document.getElementById('shopInput').addEventListener('keypress', e => {
     if (e.key==='Enter') addShop();
   });
 
-  // Enter key chain in edit panel
-  document.getElementById('inMorning').addEventListener('keypress', e => {
-    if (e.key==='Enter') document.getElementById('inLunch').focus();
-  });
-  document.getElementById('inLunch').addEventListener('keypress', e => {
-    if (e.key==='Enter') document.getElementById('inDinner').focus();
-  });
-  document.getElementById('inDinner').addEventListener('keypress', e => {
-    if (e.key==='Enter') saveMeals();
-  });
-
-  // Initial render
   renderCalendar();
 </script>
 </body>
