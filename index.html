@@ -8,21 +8,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --morning-bg: #fef3c7;
-      --morning-fg: #92400e;
-      --morning-border: #fcd34d;
-      --lunch-bg: #d1fae5;
-      --lunch-fg: #065f46;
-      --lunch-border: #6ee7b7;
-      --dinner-bg: #ffedd5;
-      --dinner-fg: #9a3412;
-      --dinner-border: #fdba74;
+      --m-bg: #fef3c7; --m-fg: #92400e; --m-ring: #fcd34d;
+      --l-bg: #d1fae5; --l-fg: #065f46; --l-ring: #6ee7b7;
+      --d-bg: #ffedd5; --d-fg: #9a3412; --d-ring: #fdba74;
       --accent: #3b82f6;
-      --today-bg: #fffbeb;
-      --today-border: #fbbf24;
-      --sun: #ef4444;
-      --sat: #3b82f6;
-      --radius: 12px;
+      --today-bg: #fffbeb; --today-ring: #fbbf24;
+      --sun: #ef4444; --sat: #3b82f6;
+      --r: 11px;
     }
 
     body {
@@ -37,92 +29,71 @@
     /* ── Header ── */
     header {
       background: #fff;
-      padding: 13px 16px 10px;
+      padding: 12px 16px 10px;
       box-shadow: 0 1px 4px rgba(0,0,0,.08);
-      position: sticky;
-      top: 0;
-      z-index: 200;
-    }
-    .header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .header-title { font-size: 17px; font-weight: 700; color: #1e293b; }
     .sync-badge {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      color: #64748b;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: #64748b;
     }
     .sync-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: #22c55e;
-      flex-shrink: 0;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #22c55e; flex-shrink: 0;
     }
     .sync-dot.offline { background: #ef4444; }
     .sync-dot.pending { background: #f59e0b; }
 
-    /* ── Week navigation ── */
+    /* ── Navigation ── */
     .cal-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px 0;
     }
     .nav-btn {
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 7px 16px;
-      font-size: 16px;
-      cursor: pointer;
-      color: #475569;
-      transition: background .15s;
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+      padding: 7px 14px; font-size: 15px; cursor: pointer; color: #475569;
     }
     .nav-btn:active { background: #e2e8f0; }
     .week-label { font-weight: 600; font-size: 13px; color: #334155; text-align: center; }
 
-    /* ── Day cards (vertical) ── */
+    /* ── 2-column grid ── */
     .days-wrap {
-      padding: 10px 12px 0;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
+      padding: 10px 12px 0;
     }
 
+    /* ── Day card ── */
     .day-card {
       background: #fff;
-      border-radius: var(--radius);
-      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+      border-radius: var(--r);
       border: 1.5px solid transparent;
+      box-shadow: 0 1px 3px rgba(0,0,0,.07);
       overflow: hidden;
+      min-width: 0;
     }
-    .day-card.today { background: var(--today-bg); border-color: var(--today-border); }
+    /* 7日目はフル幅 */
+    .day-card:nth-child(7) { grid-column: span 2; }
 
-    /* Card header row */
+    .day-card.today {
+      background: var(--today-bg);
+      border-color: var(--today-ring);
+    }
+
+    /* カードヘッダー */
     .day-head {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 12px 8px;
+      display: flex; align-items: center; gap: 5px;
+      padding: 8px 10px 7px;
       border-bottom: 1px solid #f1f5f9;
     }
-    .day-date {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1e293b;
-      letter-spacing: .02em;
-    }
+    .day-date { font-size: 15px; font-weight: 700; color: #1e293b; }
     .day-dow {
-      font-size: 13px;
-      font-weight: 600;
-      padding: 1px 7px;
-      border-radius: 20px;
-      background: #f1f5f9;
-      color: #64748b;
+      font-size: 11px; font-weight: 600;
+      padding: 1px 6px; border-radius: 20px;
+      background: #f1f5f9; color: #64748b;
     }
     .day-card.day-sun .day-date,
     .day-card.day-sun .day-dow { color: var(--sun); }
@@ -130,150 +101,110 @@
     .day-card.day-sat .day-date,
     .day-card.day-sat .day-dow { color: var(--sat); }
     .day-card.day-sat .day-dow { background: #dbeafe; }
+
     .today-badge {
-      font-size: 10px;
-      font-weight: 700;
-      color: #d97706;
-      background: #fef3c7;
-      padding: 1px 7px;
-      border-radius: 20px;
+      font-size: 10px; font-weight: 700;
+      color: #d97706; background: #fef3c7;
+      padding: 1px 6px; border-radius: 20px;
     }
     .saved-mark {
-      margin-left: auto;
-      font-size: 11px;
-      color: #10b981;
-      opacity: 0;
-      transition: opacity .3s;
+      margin-left: auto; font-size: 10px; color: #10b981;
+      opacity: 0; transition: opacity .3s; white-space: nowrap;
     }
     .saved-mark.show { opacity: 1; }
 
-    /* Meal input rows */
-    .meals { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+    /* ── Meal sections ── */
+    .meals { padding: 7px 8px 9px; display: flex; flex-direction: column; gap: 5px; }
 
-    .meal-row {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      border-radius: 8px;
-      padding: 5px 8px;
+    /* 7日目カードはメニューを横並び */
+    .day-card:nth-child(7) .meals {
+      flex-direction: row;
+      gap: 8px;
     }
-    .meal-row.m { background: var(--morning-bg); }
-    .meal-row.l { background: var(--lunch-bg); }
-    .meal-row.d { background: var(--dinner-bg); }
+    .day-card:nth-child(7) .meal-sec {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .meal-sec {
+      border-radius: 8px;
+      padding: 5px 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .meal-sec.m { background: var(--m-bg); }
+    .meal-sec.l { background: var(--l-bg); }
+    .meal-sec.d { background: var(--d-bg); }
+    .meal-sec.m:focus-within { outline: 1.5px solid var(--m-ring); }
+    .meal-sec.l:focus-within { outline: 1.5px solid var(--l-ring); }
+    .meal-sec.d:focus-within { outline: 1.5px solid var(--d-ring); }
 
     .meal-lbl {
-      font-size: 12px;
-      font-weight: 700;
-      flex-shrink: 0;
-      width: 16px;
-      text-align: center;
+      font-size: 11px; font-weight: 700;
+      margin-bottom: 1px;
     }
-    .meal-row.m .meal-lbl { color: var(--morning-fg); }
-    .meal-row.l .meal-lbl { color: var(--lunch-fg); }
-    .meal-row.d .meal-lbl { color: var(--dinner-fg); }
+    .meal-sec.m .meal-lbl { color: var(--m-fg); }
+    .meal-sec.l .meal-lbl { color: var(--l-fg); }
+    .meal-sec.d .meal-lbl { color: var(--d-fg); }
 
     .meal-in {
-      flex: 1;
-      border: none;
-      background: transparent;
-      font-size: 14px;
-      color: #1e293b;
-      outline: none;
-      padding: 2px 0;
+      width: 100%;
+      border: none; background: transparent;
+      font-size: 12px; color: #1e293b;
+      outline: none; padding: 2px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
       min-width: 0;
     }
-    .meal-in::placeholder { color: #c4c9d4; }
+    .meal-in:last-child { border-bottom: none; }
+    .meal-in::placeholder { color: #c4c9d4; font-size: 11px; }
     .meal-in:focus { color: #0f172a; }
-
-    /* Focused row highlight */
-    .meal-row.m:focus-within { outline: 1.5px solid var(--morning-border); }
-    .meal-row.l:focus-within { outline: 1.5px solid var(--lunch-border); }
-    .meal-row.d:focus-within { outline: 1.5px solid var(--dinner-border); }
 
     /* ── Shopping list ── */
     .section { margin: 14px 12px 0; }
     .section-head {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size: 15px; font-weight: 700; color: #1e293b;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
     }
     .add-row { display: flex; gap: 8px; margin-bottom: 10px; }
     .shop-input {
-      flex: 1;
-      padding: 10px 12px;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 9px;
-      font-size: 15px;
-      outline: none;
-      color: #1e293b;
+      flex: 1; padding: 10px 12px;
+      border: 1.5px solid #e2e8f0; border-radius: 9px;
+      font-size: 15px; outline: none; color: #1e293b;
     }
     .shop-input:focus { border-color: var(--accent); }
     .btn-add {
-      padding: 10px 16px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
+      padding: 10px 16px; background: var(--accent);
+      color: #fff; border: none; border-radius: 9px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
     }
     .btn-add:active { background: #2563eb; }
 
     .shop-list {
-      background: #fff;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,.07);
+      background: #fff; border-radius: var(--r);
+      overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.07);
     }
     .shop-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 14px;
-      border-bottom: 1px solid #f8fafc;
-      gap: 11px;
+      display: flex; align-items: center;
+      padding: 12px 14px; border-bottom: 1px solid #f8fafc; gap: 11px;
     }
     .shop-item:last-child { border-bottom: none; }
     .shop-item.checked .item-name { text-decoration: line-through; color: #94a3b8; }
-
     .chk-btn {
-      width: 23px; height: 23px;
-      border-radius: 50%;
-      border: 2px solid #cbd5e1;
-      background: none;
-      cursor: pointer;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: transparent;
-      transition: all .15s;
+      width: 23px; height: 23px; border-radius: 50%;
+      border: 2px solid #cbd5e1; background: none;
+      cursor: pointer; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: transparent; transition: all .15s;
     }
     .shop-item.checked .chk-btn { background: #10b981; border-color: #10b981; color: #fff; }
     .item-name { flex: 1; font-size: 15px; color: #1e293b; }
     .del-btn {
-      background: none;
-      border: none;
-      color: #cbd5e1;
-      font-size: 17px;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 6px;
-      transition: color .15s;
+      background: none; border: none; color: #cbd5e1;
+      font-size: 17px; cursor: pointer; padding: 4px 6px; border-radius: 6px;
     }
     .del-btn:active { color: #ef4444; }
-
-    .empty-msg {
-      padding: 20px;
-      text-align: center;
-      color: #94a3b8;
-      font-size: 14px;
-    }
+    .empty-msg { padding: 20px; text-align: center; color: #94a3b8; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -290,19 +221,17 @@
 </script>
 
 <header>
-  <div class="header-row">
-    <span class="header-title">🍽 献立カレンダー</span>
-    <div class="sync-badge">
-      <div class="sync-dot pending" id="syncDot"></div>
-      <span id="syncText">起動中…</span>
-    </div>
+  <span class="header-title">🍽 献立カレンダー</span>
+  <div class="sync-badge">
+    <div class="sync-dot pending" id="syncDot"></div>
+    <span id="syncText">起動中…</span>
   </div>
 </header>
 
 <div class="cal-nav">
-  <button class="nav-btn" id="prevBtn">◀ 前週</button>
+  <button class="nav-btn" id="prevBtn">◀</button>
   <span class="week-label" id="weekLabel"></span>
-  <button class="nav-btn" id="nextBtn">次週 ▶</button>
+  <button class="nav-btn" id="nextBtn">▶</button>
 </div>
 
 <div class="days-wrap" id="daysWrap"></div>
@@ -327,7 +256,7 @@
     onSnapshot, addDoc, updateDoc, deleteDoc, query, orderBy
   } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-  // ── Firebase init ──────────────────────────────
+  // ── Firebase ──────────────────────────────────
   const cfg = window.__FIREBASE_CONFIG__;
   const isConfigured = cfg.apiKey !== "YOUR_API_KEY";
   const syncDot  = document.getElementById('syncDot');
@@ -357,9 +286,10 @@
   const DOW    = ['日','月','火','水','木','金','土'];
   const MONTHS = [...Array(12)].map((_,i) => `${i+1}月`);
 
-  let baseDate  = weekStart(new Date());   // 週の先頭（今週の月曜）
+  // mealsCache[key] = { morning, lunch1, lunch2, dinner1, dinner2 }
   let mealsCache = {};
   let shopItems  = [];
+  let baseDate   = weekStart(new Date());
 
   // ── Utilities ─────────────────────────────────
   function midnight(d) { const r = new Date(d); r.setHours(0,0,0,0); return r; }
@@ -368,11 +298,10 @@
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
   function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate()+n); return r; }
-  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function weekStart(d) {
     const r = midnight(d);
-    // 月曜始まり
     const dow = r.getDay();
     r.setDate(r.getDate() - (dow === 0 ? 6 : dow - 1));
     return r;
@@ -385,16 +314,16 @@
     const days = [...Array(7)].map((_,i) => addDays(baseDate, i));
 
     // Week label
-    const first = days[0], last = days[6];
-    const sameMonth = first.getMonth() === last.getMonth();
-    document.getElementById('weekLabel').textContent = sameMonth
-      ? `${first.getFullYear()}年 ${MONTHS[first.getMonth()]} ${first.getDate()}〜${last.getDate()}日`
-      : `${first.getFullYear()}年 ${MONTHS[first.getMonth()]}${first.getDate()}日〜${MONTHS[last.getMonth()]}${last.getDate()}日`;
+    const f = days[0], l = days[6];
+    document.getElementById('weekLabel').textContent =
+      f.getMonth() === l.getMonth()
+        ? `${f.getFullYear()}年 ${MONTHS[f.getMonth()]} ${f.getDate()}〜${l.getDate()}日`
+        : `${f.getFullYear()}年 ${MONTHS[f.getMonth()]}${f.getDate()}〜${MONTHS[l.getMonth()]}${l.getDate()}`;
 
-    // 既存 input の focused な key+meal を記録（更新中に blur させない）
-    const active = document.activeElement;
-    const focusedKey  = active?.dataset?.key  || null;
-    const focusedMeal = active?.dataset?.meal || null;
+    // フォーカス中の input を記録（再描画後に復元）
+    const ae = document.activeElement;
+    const focusKey  = ae?.dataset?.key  ?? null;
+    const focusMeal = ae?.dataset?.meal ?? null;
 
     wrap.innerHTML = days.map(d => {
       const k   = toKey(d);
@@ -402,55 +331,60 @@
       const m   = mealsCache[k] || {};
       const isToday = k === tk;
 
-      const cls = [
-        'day-card',
-        dow === 0 ? 'day-sun' : '',
-        dow === 6 ? 'day-sat' : '',
-        isToday   ? 'today'   : ''
+      const cls = ['day-card',
+        dow===0 ? 'day-sun' : '',
+        dow===6 ? 'day-sat' : '',
+        isToday ? 'today'   : ''
       ].filter(Boolean).join(' ');
 
-      const mInput = (meal, clsName, lbl, ph) => `
-        <div class="meal-row ${clsName}">
-          <span class="meal-lbl">${lbl}</span>
-          <input class="meal-in" type="text"
-            data-key="${k}" data-meal="${meal}"
-            placeholder="${ph}"
-            value="${esc(m[meal] || '')}">
-        </div>`;
+      // 入力欄1行
+      const inp = (meal, ph) =>
+        `<input class="meal-in" type="text"
+          data-key="${k}" data-meal="${meal}"
+          value="${esc(m[meal]||'')}"
+          placeholder="${ph}" autocomplete="off">`;
 
-      return `<div class="${cls}" data-key="${k}">
+      return `<div class="${cls}">
         <div class="day-head">
           <span class="day-date">${d.getMonth()+1}/${d.getDate()}</span>
           <span class="day-dow">${DOW[dow]}</span>
           ${isToday ? '<span class="today-badge">今日</span>' : ''}
-          <span class="saved-mark" id="saved-${k}">保存 ✓</span>
+          <span class="saved-mark" id="sv-${k}">✓</span>
         </div>
         <div class="meals">
-          ${mInput('morning','m','朝','朝食のメニュー')}
-          ${mInput('lunch',  'l','昼','昼食のメニュー')}
-          ${mInput('dinner', 'd','夕','夕食のメニュー')}
+          <div class="meal-sec m">
+            <span class="meal-lbl">朝</span>
+            ${inp('morning','朝食')}
+          </div>
+          <div class="meal-sec l">
+            <span class="meal-lbl">昼</span>
+            ${inp('lunch1','昼食①')}
+            ${inp('lunch2','昼食②')}
+          </div>
+          <div class="meal-sec d">
+            <span class="meal-lbl">夕</span>
+            ${inp('dinner1','夕食①')}
+            ${inp('dinner2','夕食②')}
+          </div>
         </div>
       </div>`;
     }).join('');
 
     // イベント登録
-    wrap.querySelectorAll('.meal-in').forEach(input => {
-      input.addEventListener('blur',  () => onMealBlur(input));
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
-      });
+    wrap.querySelectorAll('.meal-in').forEach(el => {
+      el.addEventListener('blur',    () => onBlur(el));
+      el.addEventListener('keydown', e  => { if (e.key==='Enter') { e.preventDefault(); el.blur(); } });
     });
 
     // フォーカス復元
-    if (focusedKey && focusedMeal) {
-      const el = wrap.querySelector(
-        `.meal-in[data-key="${focusedKey}"][data-meal="${focusedMeal}"]`
+    if (focusKey && focusMeal) {
+      const target = wrap.querySelector(
+        `.meal-in[data-key="${focusKey}"][data-meal="${focusMeal}"]`
       );
-      if (el) {
-        el.focus();
-        // カーソルを末尾に
-        const len = el.value.length;
-        el.setSelectionRange(len, len);
+      if (target) {
+        target.focus();
+        const len = target.value.length;
+        target.setSelectionRange(len, len);
       }
     }
   }
@@ -458,19 +392,14 @@
   // ── Auto-save on blur ─────────────────────────
   const saveTimers = {};
 
-  function onMealBlur(input) {
-    const key  = input.dataset.key;
-    const meal = input.dataset.meal;
-    const val  = input.value.trim();
-
-    // 変更なければスキップ
-    if ((mealsCache[key]?.[meal] || '') === val) return;
-
-    // キャッシュ更新
+  function onBlur(el) {
+    const key  = el.dataset.key;
+    const meal = el.dataset.meal;
+    const val  = el.value.trim();
+    if ((mealsCache[key]?.[meal] ?? '') === val) return;
     if (!mealsCache[key]) mealsCache[key] = {};
     mealsCache[key][meal] = val;
 
-    // デバウンス（同じカードの複数フィールドをまとめて保存）
     clearTimeout(saveTimers[key]);
     saveTimers[key] = setTimeout(() => saveMeals(key), 300);
   }
@@ -478,30 +407,31 @@
   async function saveMeals(key) {
     const m = mealsCache[key] || {};
     const data = {
-      morning:   m.morning   || '',
-      lunch:     m.lunch     || '',
-      dinner:    m.dinner    || '',
+      morning: m.morning  || '',
+      lunch1:  m.lunch1   || '',
+      lunch2:  m.lunch2   || '',
+      dinner1: m.dinner1  || '',
+      dinner2: m.dinner2  || '',
       updatedAt: new Date().toISOString()
     };
-
     if (db) {
       setSyncStatus('pending', '保存中…');
       try {
-        await setDoc(doc(db, 'meals', key), data);
+        await setDoc(doc(db,'meals',key), data);
         setSyncStatus('ok', '同期中');
-        flashSaved(key);
+        flash(key);
       } catch(e) {
         console.error(e);
         setSyncStatus('offline', '保存エラー');
       }
     } else {
       localStorage.setItem('meals', JSON.stringify(mealsCache));
-      flashSaved(key);
+      flash(key);
     }
   }
 
-  function flashSaved(key) {
-    const el = document.getElementById(`saved-${key}`);
+  function flash(key) {
+    const el = document.getElementById(`sv-${key}`);
     if (!el) return;
     el.classList.add('show');
     setTimeout(() => el.classList.remove('show'), 2000);
@@ -515,12 +445,11 @@
       return;
     }
     el.innerHTML = shopItems.map(item => `
-      <div class="shop-item${item.checked?' checked':''}" data-id="${item.id}">
+      <div class="shop-item${item.checked?' checked':''}">
         <button class="chk-btn" data-id="${item.id}">✓</button>
         <span class="item-name">${esc(item.name)}</span>
         <button class="del-btn" data-del="${item.id}">✕</button>
       </div>`).join('');
-
     el.querySelectorAll('.chk-btn').forEach(b =>
       b.addEventListener('click', () => toggleShop(b.dataset.id)));
     el.querySelectorAll('.del-btn').forEach(b =>
@@ -533,7 +462,8 @@
     if (!name) return;
     input.value = '';
     if (db) {
-      await addDoc(collection(db,'shopping'), { name, checked:false, createdAt: new Date().toISOString() });
+      await addDoc(collection(db,'shopping'),
+        { name, checked:false, createdAt: new Date().toISOString() });
     } else {
       shopItems.push({ id: Date.now().toString(), name, checked:false });
       localStorage.setItem('shopping', JSON.stringify(shopItems));
@@ -570,7 +500,6 @@
         if (ch.type==='removed') delete mealsCache[ch.doc.id];
         else mealsCache[ch.doc.id] = ch.doc.data();
       });
-      // フォーカス中のカードは再描画で上書きしない
       renderCalendar();
     }, err => {
       console.error(err);
@@ -585,8 +514,8 @@
       }
     );
   } else {
-    try { mealsCache = JSON.parse(localStorage.getItem('meals')   || '{}'); } catch(e){}
-    try { shopItems  = JSON.parse(localStorage.getItem('shopping')|| '[]'); } catch(e){}
+    try { mealsCache = JSON.parse(localStorage.getItem('meals')    || '{}'); } catch(e){}
+    try { shopItems  = JSON.parse(localStorage.getItem('shopping') || '[]'); } catch(e){}
     renderCalendar();
     renderShop();
   }
@@ -598,7 +527,6 @@
   document.getElementById('nextBtn').addEventListener('click', () => {
     baseDate = addDays(baseDate,  7); renderCalendar();
   });
-
   document.getElementById('addBtn').addEventListener('click', addShop);
   document.getElementById('shopInput').addEventListener('keypress', e => {
     if (e.key==='Enter') addShop();
